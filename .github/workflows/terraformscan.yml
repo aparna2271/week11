@@ -1,0 +1,22 @@
+name: Terraform Security Scan
+
+on:
+  push:
+    branches: [staging]
+
+jobs:
+  security_scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+      - name: Install dependencies
+        run: |
+          apk add --no-cache git python3 py3-pip
+          pip3 install pre-commit
+      - name: Scan Terraform code
+        run: pre-commit run --all-files
