@@ -80,3 +80,28 @@ resource "aws_security_group" "web-sg" {
 output "web-address" {
   value = "${aws_instance.web.public_dns}:8080"
 }
+
+resource "aws_security_group" "web_server_sg" {
+  name_prefix = "web_server_sg_"
+  description = "Security group for web servers"
+
+  ingress {
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port = 443
+    to_port = 443
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "web_server_sg"
+    Environment = "staging"
+  }
+}
+
